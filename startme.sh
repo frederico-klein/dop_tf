@@ -2,12 +2,17 @@
 
 # nvidia-docker became docker --gpus all now and probably the NV_GPU flag doesn't work anymore. But maybe someone might want to still use nvidia-docker2 package, so this script needs to become slightly more generic.
 
+##todo: add check to see if /mnt/share exists
+##todo add check to see if expect is installed
+##todo: fix expect syntax. it works in some machines but not others.
+
 #Tthis was horrible and it took me long to fix
 #PASSWD=$1
 echo "Password for $USER"
 read -s PASSWD
 MYUSERNAME=frederico
-DOCKERHOSTNAME=poop
+##todo: does it make sense to mount a remote host?
+DOCKERHOSTNAME=`hostname`
 THISVOLUMENAME=sshvolume-torch_new
 DOCKERMACHINEIP=172.28.5.31
 DOCKERMACHINENAME=tch_new
