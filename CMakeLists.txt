@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.0.2)
 project(dop_tch)
 
 set( DOCKERMACHINENAME tch_new)
-set( DOCKERWORKINGDIR ../../../tub/Tch)
+##this must have an alias, but I guess it is fine and shouldn't break
+set( DOCKERWORKINGDIR ../../src/dop_tch/)
+
 set( DOCKERCONTEXT ./)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
