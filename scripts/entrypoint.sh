@@ -11,5 +11,5 @@ echo "history -s git clone https://github.com/amreelab/esa_project.git " >> /roo
 
 #bash  /root/face_recognition/catkin_ws.sh
 service ssh restart
-cat /root/banner.txt
+cat /etc/banner.txt
 exec "$@"

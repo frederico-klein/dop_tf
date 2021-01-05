@@ -50,10 +50,14 @@ RUN apt-get install -y --fix-missing \
 RUN rosdep init && rosdep update
 
 # to get ssh working for the ros machine to be functional: (adapted from docker docs running_ssh_service)
+#add my snazzy banner
+ADD banner.txt /etc/
+
 RUN mkdir /var/run/sshd \
      && echo 'root:ros_ros' | chpasswd \
-     && sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
-     && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+     && sed -i 's/[#\s]*PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
+     && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
+     && sed -i 's/[#\s]*Banner none/Banner \/etc\/banner.txt/' /etc/ssh/sshd_config
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
@@ -63,10 +67,8 @@ ADD requirements_tch.txt /root/
 
 RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
 
-ENV ROS_MASTER_URI=http://SATELLITE-S50-B:11311
+#ENV ROS_MASTER_URI=http://SATELLITE-S50-B:11311
 
-#add my snazzy banner
-ADD banner.txt /root/
 ### try to run jupyter so we can do some coding...
 RUN pip install jupyter && pip install -r /root/requirements_tch.txt
 #&& jupyter tensorboard enable --system
@@ -78,8 +80,17 @@ ADD scripts/entrypoint.sh /root/
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-RUN git clone https://github.com/huggingface/transformers 
-RUN python transformers/utils/download_glue_data.py
+#I've already installed this with pip. set version there as well if you want to change it.
+#RUN git clone https://github.com/huggingface/transformers
+##forbidden? probably because they didn't want that horrible code there anymore.
+#RUN python transformers/utils/download_glue_data.py
 RUN ln -s /mnt/share/misc /workspace/misc
+##this is hacky, fix properly.
+RUN mkdir -p /usr/local/nvidia/lib/ && \
+  ln -s /opt/conda/lib/libcudart.so.11.0  /usr/local/nvidia/lib/libcudart.so.10.1
+
+### the sed line is incorrect. when clenup comes change it to:
+
+
 ENTRYPOINT ["/root/entrypoint.sh"]
      ###needs the catkin stuff as well.
