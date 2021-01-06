@@ -9,7 +9,7 @@
 #Tthis was horrible and it took me long to fix
 ##todo: does it make sense to mount a remote host?
 DOCKERMACHINEIP=172.28.6.31
-DOCKERMACHINENAME=tch_new
+DOCKERMACHINENAME=tofu
 MACHINEHOSTNAME=torch_machine4
 #THISWSPATH=/workspace
 #DOCKERFILE=docker/pytorch/ ## standard should be .

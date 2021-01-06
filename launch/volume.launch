@@ -1,14 +1,14 @@
 <launch>
-  <node name="my_tub_volume" pkg="rosdop" type="cr_volume.py" output="screen">
-    <param name="name"            type="string" value="tubvolume0"                            />
+  <node name="my_tub_volume_tf" pkg="rosdop" type="cr_volume.py" output="screen">
+    <param name="name"            type="string" value="tubvolume1"                            />
     <param name="username"        type="string" value="frederico"                             />
     <param name="sshfs_hostname"  type="string" value="192.168.0.6"                           />
     <param name="identity_file"   type="string" value="/root/.ssh/id_rsa"                     />
     <!-- needs an absolute path! -->
-    <param name="tub_path"        type="string" value="$(find dop_tch)"  />
+    <param name="tub_path"        type="string" value="$(find dop_tf)"  />
     <!-- It is no longer the workspace, because of submodules, but this name makes more sense -->
     <!-- than anything else I could think. -->
-    <param name="ws_path"         type="string" value="/root/dop_tch"                  />
+    <param name="ws_path"         type="string" value="/root/dop_tf"                  />
   </node>
 
   <node name="docker_master" pkg="rosdop" type="docker_master.py" output="screen"/>

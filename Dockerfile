@@ -1,11 +1,13 @@
-FROM pytorch/pytorch:latest
+FROM tensorflow/tensorflow:latest-gpu-jupyter
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-ENV DEBIAN_FRONTEND noninteractive
+RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
 
-ARG PYTHON_VERSION=3.6
+##maybe needs curl, so it goes in the awkward middle:
+ADD scripts/ros_key.sh /root/
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
          build-essential \
          cmake \
@@ -16,37 +18,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
          gnupg2 \
          libjpeg-dev \
          lsb-core \
-         libpng-dev &&\
-     rm -rf /var/lib/apt/lists/*
+         libpng-dev && \
+    /root/ros_key.sh && \
+    apt-get install -y --fix-missing \
+         python3-pip \
+         python-pip \
+         openssh-server\
+         libssl-dev \
+         lsb-core \
+         tar\
+         libboost-all-dev \
+         ros-melodic-ros-base \
+         python-rosdep \
+         python-rosinstall \
+         python-rosinstall-generator \
+         python-wstool &&\
+    apt-get clean && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
 
-#TODO: ros not working with python3. needs fixing.
-
-#### ROS stuff
-
-RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
-ADD scripts/ros_key.sh /root/
-RUN /root/ros_key.sh
-
-##after adding the key we need to update it again!
-
-RUN apt-get -y update
-RUN apt-get install -y --fix-missing \
-     python3-pip \
-     python-pip \
-     openssh-server\
-     libssl-dev \
-     lsb-core \
-     python-sh \
-     tar\
-     libboost-all-dev \
-     ros-melodic-ros-base \
-     python-rosdep \
-     python-rosinstall \
-     python-rosinstall-generator \
-     python-wstool \
-     && apt-get clean && rm -rf /tmp/* /var/tmp/*
-
-     # some more ros stuff
+# some more ros stuff
 RUN rosdep init && rosdep update
 RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
 
@@ -65,12 +54,8 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 
 EXPOSE 22
 
-ADD requirements_tch.txt /root/
-RUN pip install -r /root/requirements_tch.txt
-
-##this is hacky, fix properly.
-RUN mkdir -p /usr/local/nvidia/lib/ && \
-  ln -s /opt/conda/lib/libcudart.so.11.0  /usr/local/nvidia/lib/libcudart.so.10.1
+ADD requirements_tf.txt /root/
+RUN pip install -r /root/requirements_tf.txt
 
 ADD scripts/entrypoint.sh /root/
 ENTRYPOINT ["/root/entrypoint.sh"]

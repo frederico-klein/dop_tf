@@ -1,5 +1,5 @@
 <launch>
-  <node name="my_bridge_spawner" pkg="rosdop" type="cr_bridge.py" output="screen">
+  <node name="my_bridge_spawner_tf" pkg="rosdop" type="cr_bridge.py" output="screen">
     <param name="name"    type="string" value="br0"           />
     <param name="subnet"  type="string" value="172.28.0.0/16" />
     <param name="iprange" type="string" value="172.28.6.0/24" />
