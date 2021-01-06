@@ -14,3 +14,4 @@ git+https://github.com/huggingface/transformers
 wget
 wikiextractor
 spacy
+jupyter

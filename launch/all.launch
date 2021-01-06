@@ -1,0 +1,33 @@
+<launch>
+  <node name="my_tub_volume" pkg="rosdop" type="cr_volume.py" output="screen">
+    <param name="name"            type="string" value="tubvolume0"                            />
+    <param name="username"        type="string" value="frederico"                             />
+    <param name="sshfs_hostname"  type="string" value="192.168.0.6"                           />
+    <param name="identity_file"   type="string" value="/root/.ssh/id_rsa"                     />
+    <!-- needs an absolute path! -->
+    <param name="tub_path"        type="string" value="$(find dop_tch)"  />
+    <!-- It is no longer the workspace, because of submodules, but this name makes more sense -->
+    <!-- than anything else I could think. -->
+    <param name="ws_path"         type="string" value="/root/dop_tch"                  />
+  </node>
+
+  <node name="my_torch_tub" pkg="rosdop" type="DockerTub.py" output="screen" required="true">
+    <param name="name"            type="string"       value="tub0"           />
+    <param name="imagename"       type="string"       value="tch_new"        />
+    <param name="network_name"    type="string"       value="br0"            />
+    <param name="tub_volume"      type="string"       value="tubvolume0"     />
+    <param name="hostname"        type="string"       value="torch_machine4" />
+    <param name="dockerfile_directory" type="string"  value="."              />
+    <param name="machineip"            type="string"  value="172.28.6.31"    />
+  </node>
+
+  <node name="my_bridge_spawner" pkg="rosdop" type="cr_bridge.py" output="screen">
+    <param name="name"    type="string" value="br0"           />
+    <param name="subnet"  type="string" value="172.28.0.0/16" />
+    <param name="iprange" type="string" value="172.28.6.0/24" />
+    <param name="gateway" type="string" value="172.28.6.254"  />
+  </node>
+
+  <node name="docker_master" pkg="rosdop" type="docker_master.py" output="screen"/>
+
+</launch>
