@@ -1,9 +1,10 @@
-FROM tensorflow/tensorflow:latest-gpu-jupyter
+#FROM tensorflow/tensorflow:latest-gpu-jupyter ##2.4.0 is giving me a core dumped
+FROM tensorflow/tensorflow:2.3.1-gpu-jupyter
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+ENV DEBIAN_FRONTEND noninteractive
 
 ##maybe needs curl, so it goes in the awkward middle:
 ADD scripts/ros_key.sh /root/
@@ -19,8 +20,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
          libjpeg-dev \
          lsb-core \
          libpng-dev && \
+    echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list && \
     /root/ros_key.sh && \
-    apt-get install -y --fix-missing \
+    apt-get update &&  apt-get install -y --fix-missing \
          python3-pip \
          python-pip \
          openssh-server\
@@ -58,4 +60,5 @@ ADD requirements_tf.txt /root/
 RUN pip install -r /root/requirements_tf.txt
 
 ADD scripts/entrypoint.sh /root/
+WORKDIR /workspace
 ENTRYPOINT ["/root/entrypoint.sh"]

@@ -11,6 +11,7 @@
     <param name="ws_path"         type="string" value="/root/dop_tf"                  />
   </node>
 
-  <node name="docker_master" pkg="rosdop" type="docker_master.py" output="screen"/>
+<!-- need to do something to ensure there is only one master. This is bogus -->
+  <!-- <node name="docker_master" pkg="rosdop" type="docker_master.py" output="screen"/> -->
 
 </launch>
