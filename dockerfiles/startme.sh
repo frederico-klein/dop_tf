@@ -14,7 +14,7 @@ MYUSERNAME=frederico
 ##todo: does it make sense to mount a remote host?
 DOCKERHOSTNAME=`hostname`
 THISVOLUMENAME=sshvolume-workspace-torch_new
-DOCKERMACHINEIP=172.28.6.31
+DOCKERMACHINEIP=172.28.5.31
 DOCKERMACHINENAME=tofu
 MACHINEHOSTNAME=torch_machine4
 THISWSPATH=/workspace
@@ -50,8 +50,8 @@ else
     docker network create \
       --driver=bridge \
       --subnet=172.28.0.0/16 \
-      --ip-range=172.28.6.0/24 \
-      --gateway=172.28.6.254 \
+      --ip-range=172.28.5.0/24 \
+      --gateway=172.28.5.254 \
       br0
   else
     echo "found br0 docker network."

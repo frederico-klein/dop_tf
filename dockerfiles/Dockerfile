@@ -55,9 +55,10 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
 EXPOSE 22
+WORKDIR /workspace
 
 ADD requirements_tf.txt /root/
-RUN pip install -r /root/requirements_tf.txt
+RUN /usr/bin/python3 -m pip install --upgrade pip && pip3 install -r /root/requirements_tf.txt
 
 ADD scripts/entrypoint.sh /root/
 WORKDIR /workspace

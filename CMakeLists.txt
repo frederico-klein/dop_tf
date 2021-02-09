@@ -4,8 +4,8 @@ project(dop_tf)
 set( DOCKERMACHINENAME tofu)
 ##this must have an alias, but I guess it is fine and shouldn't break
 set( DOCKERWORKINGDIR ../../src/dop_tf/)
-
-set( DOCKERCONTEXT ./)
+#set( nocache OFF)
+set( DOCKERCONTEXT ./dockerfiles/)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -155,17 +155,30 @@ include_directories(
 # )
 
 ############
+if(NOCACHE)
 
-add_custom_target( docker_build_${PROJECT_NAME} ALL
-COMMAND docker build -t ${DOCKERMACHINENAME} ${DOCKERCONTEXT}
+  add_custom_target( docker_build_${PROJECT_NAME} ALL
+  COMMAND docker build --no-cache -t ${DOCKERMACHINENAME} -f dockerfiles/Dockerfile ${DOCKERCONTEXT}
 
-#COMMAND ls -la
+  #COMMAND ls -la
 
-COMMENT Building docker image tofu
-WORKING_DIRECTORY  ${DOCKERWORKINGDIR}
+  COMMENT Building docker image ${DOCKERMACHINENAME} without cache
+  WORKING_DIRECTORY  ${DOCKERWORKINGDIR}
 
-) ## here is the thing, do I want this to run every time?
+  ) ## here is the thing, do I want this to run every time?
 
+else()
+
+  add_custom_target( docker_build_${PROJECT_NAME} ALL
+  COMMAND docker build -t ${DOCKERMACHINENAME} -f dockerfiles/Dockerfile ${DOCKERCONTEXT}
+
+  #COMMAND ls -la
+
+  COMMENT Building docker image ${DOCKERMACHINENAME}
+  WORKING_DIRECTORY  ${DOCKERWORKINGDIR}
+
+  ) ## here is the thing, do I want this to run every time?
+endif(NOCACHE)
 
 
 

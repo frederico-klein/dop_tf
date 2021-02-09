@@ -1,3 +1,0 @@
-wandb
-git+https://github.com/huggingface/transformers
-numpy
