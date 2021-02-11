@@ -1,0 +1,12 @@
+<launch>
+  <node name="my_torch_tub_tf" pkg="rosdop" type="DockerTub.py" output="screen" required="true">
+    <param name="name"            type="string"       value="tub1"           />
+    <param name="imagename"       type="string"       value="tofu"        />
+    <param name="network_name"    type="string"       value="br0"            />
+    <param name="tub_volume"      type="string"       value="tubvolume1"     />
+    <param name="hostname"        type="string"       value="tf_machine1" />
+    <param name="dockerfile_directory" type="string"  value="."              />
+    <param name="machineip"            type="string"  value="172.28.6.13"    />
+  </node>
+
+</launch>

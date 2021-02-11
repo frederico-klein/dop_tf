@@ -1,0 +1,5 @@
+<launch>
+  <include file="$(find dop_tf)/launch/volume.launch" />
+  <include file="$(find dop_tf)/launch/tub.launch" />
+  <include file="$(find dop_tf)/launch/bridge.launch" />
+</launch>
