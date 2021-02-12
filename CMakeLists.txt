@@ -7,6 +7,8 @@ set( DOCKERWORKINGDIR ../../src/dop_tf/)
 #set( nocache OFF)
 set( DOCKERCONTEXT ./dockerfiles/)
 
+set( NOCACHE OFF)
+
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
 
@@ -156,6 +158,7 @@ include_directories(
 
 ############
 if(NOCACHE)
+  message("No cache for ${PROJECT_NAME} docker building all layers!")
 
   add_custom_target( docker_build_${PROJECT_NAME} ALL
   COMMAND docker build --no-cache -t ${DOCKERMACHINENAME} -f dockerfiles/Dockerfile ${DOCKERCONTEXT}
@@ -168,7 +171,7 @@ if(NOCACHE)
   ) ## here is the thing, do I want this to run every time?
 
 else()
-
+  message("Cache used for ${PROJECT_NAME} docker building.")
   add_custom_target( docker_build_${PROJECT_NAME} ALL
   COMMAND docker build -t ${DOCKERMACHINENAME} -f dockerfiles/Dockerfile ${DOCKERCONTEXT}
 
